@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Prediction</title>
+
+    <!-- Include jQuery and Select2 CSS and JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Body Styling */
+        body {
+            background: linear-gradient(135deg, #2e2f3e, #1a1b26);
+            color: #fff;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            background: #1f212e;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            animation: fadeInDown 1s ease;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #00bcd4;
+        }
+
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #2e3041;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+            width: 100%;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        select, input {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            border-color: #00bcd4;
+            outline: none;
+            background-color: #fff;
+        }
+
+        button {
+            padding: 1rem;
+            background-color: #00bcd4;
+            color: #fff;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #0097a7;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Stock Prediction</h1>
+    </header>
+    <main class="container">
+        <form action="/predict" method="get">
+            <label for="ticker">Select Ticker Symbol:</label>
+            <select id="ticker" name="ticker" required>
+                <option value="">--Select a Ticker--</option>
+                <!-- US Tickers -->
+                <option value="AAPL">Apple (AAPL)</option>
+                <option value="GOOGL">Google (GOOGL)</option>
+                <option value="AMZN">Amazon (AMZN)</option>
+                <option value="TSLA">Tesla (TSLA)</option>
+                <option value="MSFT">Microsoft (MSFT)</option>
+                <option value="NVDA">Nvidia (NVDA)</option>
+                <option value="META">Meta (META)</option>
+                <option value="NFLX">Netflix (NFLX)</option>
+                <option value="DIS">Walt Disney (DIS)</option>
+                <option value="PYPL">PayPal (PYPL)</option>
+                <option value="AMD">Advanced Micro Devices (AMD)</option>
+                <option value="INTC">Intel (INTC)</option>
+                <option value="BABA">Alibaba (BABA)</option>
+                <option value="V">Visa (V)</option>
+                <option value="MA">Mastercard (MA)</option>
+                <option value="BRK.A">Berkshire Hathaway (BRK.A)</option>
+                <option value="JNJ">Johnson & Johnson (JNJ)</option>
+                <option value="PFE">Pfizer (PFE)</option>
+                <option value="GM">General Motors (GM)</option>
+                <option value="CVX">Chevron (CVX)</option>
+                <option value="XOM">ExxonMobil (XOM)</option>
+                <option value="WMT">Walmart (WMT)</option>
+                <option value="KO">Coca-Cola (KO)</option>
+                <option value="T">AT&T (T)</option>
+                <option value="SPY">SPDR S&P 500 ETF (SPY)</option>
+                <option value="QQQ">Invesco QQQ Trust (QQQ)</option>
+                <option value="IWM">iShares Russell 2000 ETF (IWM)</option>
+                <option value="VXX">iPath S&P 500 VIX (VXX)</option>
+
+                <!-- Indian Tickers -->
+                <option value="TCS.NS">Tata Consultancy Services (TCS)</option>
+                <option value="INFY.NS">Infosys (INFY)</option>
+                <option value="RELIANCE.NS">Reliance Industries (RELIANCE)</option>
+                <option value="HDFCBANK.NS">HDFC Bank (HDFCBANK)</option>
+                <option value="ICICIBANK.NS">ICICI Bank (ICICIBANK)</option>
+                <option value="HINDUNILVR.NS">Hindustan Unilever (HINDUNILVR)</option>
+                <option value="BAJAJ-AUTO.NS">Bajaj Auto (BAJAJ-AUTO)</option>
+                <option value="BHARTIARTL.NS">Bharti Airtel (BHARTIARTL)</option>
+                <option value="ITC.NS">ITC (ITC)</option>
+                <option value="M&M.NS">Mahindra & Mahindra (M&M)</option>
+                <option value="LT.NS">Larsen & Toubro (LT)</option>
+                <option value="ASIANPAINT.NS">Asian Paints (ASIANPAINT)</option>
+                <option value="SUNPHARMA.NS">Sun Pharma (SUNPHARMA)</option>
+                <option value="TITAN.NS">Titan (TITAN)</option>
+                <option value="AXISBANK.NS">Axis Bank (AXISBANK)</option>
+                <option value="KOTAKBANK.NS">Kotak Mahindra Bank (KOTAKBANK)</option>
+                <option value="DRREDDY.NS">Dr. Reddy's Laboratories (DRREDDY)</option>
+                <option value="WIPRO.NS">Wipro (WIPRO)</option>
+                <option value="ULTRACEMCO.NS">UltraTech Cement (ULTRACEMCO)</option>
+                <option value="DIVISLAB.NS">Divi's Laboratories (DIVISLAB)</option>
+                <option value="GAIL.NS">GAIL (GAIL)</option>
+                <option value="RECLTD.NS">REC Limited (RECLTD)</option>
+                <option value="POWERGRID.NS">PowerGrid Corporation (POWERGRID)</option>
+                <option value="NTPC.NS">NTPC Limited (NTPC)</option>
+                <option value="SBIN.NS">State Bank of India (SBIN)</option>
+                <option value="UPL.NS">UPL (UPL)</option>
+                <option value="TATAMOTORS.NS">Tata Motors (TATAMOTORS)</option>
+                <option value="CIPLA.NS">Cipla (CIPLA)</option>
+                <option value="ZEEL.NS">Zee Entertainment (ZEEL)</option>
+                <option value="INDUSINDBK.NS">IndusInd Bank (INDUSINDBK)</option>
+            </select>
+
+            <label for="days">Number of Days:</label>
+            <input type="number" id="days" name="days" required placeholder="Enter number of days">
+
+            <button type="submit">Predict</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2025 Stock Prediction App</p>
+    </footer>
+
+    <!-- Initialize Select2 -->
+    <script>
+        $(document).ready(function() {
+            $('#ticker').select2({
+                placeholder: "Search and select a ticker",
+                allowClear: true
+            });
+        });
+    </script>
+</body>
+</html>
