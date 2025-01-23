@@ -5,232 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prediction Result</title>
     <style>
-        /* General Reset */
-        * {
+        /* Styling */
+        body {
+            background: #1a1b26;
+            color: white;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
 
-        /* Body Styling */
-        body {
-            background: linear-gradient(135deg, #2e2f3e, #1a1b26);
-            color: #fff;
-            line-height: 1.6;
-        }
-
-        /* Header */
         header {
+            background: #282a36;
+            padding: 15px;
             text-align: center;
-            background: #1f212e;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            animation: fadeInDown 1s ease;
         }
 
-        header h1 {
-            font-size: 2.5rem;
+        h1 {
             color: #00bcd4;
         }
 
-        /* Container */
         .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 1rem;
-            animation: fadeInUp 1s ease;
-        }
-
-        /* Plot Section */
-        .plots {
-            margin-bottom: 2rem;
-        }
-
-        .card {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
             background: #2e3041;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        .chart {
+            margin: 20px 0;
         }
 
-        .card h2, .card h3 {
-            color: #00bcd4;
-            margin-bottom: 1rem;
-        }
-
-        /* Prediction Section */
-        .prediction {
-            margin-top: 2rem;
-        }
-
-        /* Price List */
-        .price-list {
-            list-style-type: none;
-            padding-left: 1.5rem;
-        }
-
-        .price-list li {
-            margin: 0.5rem 0;
-            padding: 0.5rem;
-            background: #3b3c4a;
-            border-radius: 5px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Buttons */
-        .button {
-            display: inline-block;
-            background: #00bcd4;
-            color: #fff;
-            padding: 0.8rem 1.2rem;
-            text-align: center;
-            border-radius: 5px;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: background 0.3s ease;
-            margin-top: 2rem;
-        }
-
-        .button:hover {
-            background: #0097a7;
-        }
-
-        /* Charts */
-        .chart-container {
-            border-radius: 10px;
-            padding: 1rem;
-            background: #3b3c4a;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background: #1f212e;
-            color: #aaa;
-            margin-top: 2rem;
-        }
-
-        /* Table Styling */
         table {
             width: 100%;
-            margin-top: 2rem;
+            margin-top: 20px;
             border-collapse: collapse;
-            background-color: #2e3041;
-            border-radius: 8px;
         }
 
         th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            border: 1px solid #444;
         }
 
         th {
-            background-color: #1f212e;
-            color: #00bcd4;
+            background: #333;
         }
 
-        tr:nth-child(even) {
-            background-color: #333;
-        }
-
-        tr:hover {
-            background-color: #444;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        td {
+            background: #222;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Prediction Result for {{ ticker }}</h1>
+        <h1>{{ ticker }} Stock Prediction</h1>
     </header>
-    <main class="container">
-        <div class="plots">
-            <!-- Display Candlestick chart -->
-            <section class="card">
-                <h2>Live Share Price</h2>
-                <div class="chart-container">
-                    {{ plot_div|safe }}
-                </div>
-            </section>
-
-            <!-- Display Prediction Graph -->
-            <section class="card">
-                <h2>Future Prediction Graph</h2>
-                <div class="chart-container">
-                    {{ plot_div_pred|safe }}
-                </div>
-            </section>
+    <div class="container">
+        <div class="chart">
+            <h2>Historical Candlestick Chart</h2>
+            {{ plot_div|safe }}
         </div>
-
-        <!-- Display Prediction Confidence and Price Table -->
-        <section class="card prediction">
+        <div class="chart">
             <h2>Prediction Confidence: {{ confidence|round(2) }}</h2>
-
-            <h3>Predicted Prices:</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Predicted Price ({{ currency }})</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for index, row in pred_df.iterrows() %}
-                    <tr>
-                        <td>{{ row['Date'].strftime('%Y-%m-%d') }}</td>
-                        <td>{{ row['Prediction']|round(2) }} {{ currency }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Go Back Button -->
-        <a href="/" class="button">Go Back</a>
-    </main>
-    <footer>
-        <p>&copy; 2025 Prediction Analytics</p>
-    </footer>
+            <h2>Prediction Graph</h2>
+            {{ plot_div_pred|safe }}
+        </div>
+        <h3>Predicted Prices:</h3>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Predicted Price (USD)</th>
+            </tr>
+            {% for index, row in pred_df.iterrows() %}
+            <tr>
+                <td>{{ row['Date'].strftime('%Y-%m-%d') }}</td>
+                <td>{{ row['Prediction']|round(2) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </body>
 </html>
